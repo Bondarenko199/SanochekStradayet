@@ -1,0 +1,183 @@
+<html>
+<head>
+    <title>Перестановка изображений</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1240px;
+            width: 100%;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .main-section {
+            padding: 30px 0;
+        }
+
+        .main-headline-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .main-headline {
+            display: inline-block;
+            font-size: 36px;
+        }
+
+        .images-list {
+            padding: 0;
+            text-align: center;
+            list-style: none;
+        }
+
+        .images-list-item {
+            width: 20%;
+            display: inline-block;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .main-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .secondary-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result {
+            width: 30%;
+            margin: 0 auto;
+            transition: .3s ease-in-out;
+        }
+        .result img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <section class="main-section">
+        <div class="container">
+            <div class="main-headline-container">
+                <h1 class="main-headline">Галерея рисунков</h1>
+            </div>
+            <div class="images-container">
+                <ul class="images-list" id="imagesList">
+                    <li class="images-list-item">
+                        <img src="img/KnGhHK5Xgck.jpg" class="main-image" name="pic1">
+                    </li>
+                    <li class="images-list-item">
+                        <img src="img/2xaeh-nsep8.jpg" class="main-image" name="pic2">
+                    </li>
+                    <li class="images-list-item">
+                        <img src="img/LlC-v74TzvU.jpg" class="main-image" name="pic3">
+                    </li>
+                </ul>
+            </div>
+            <div class="main-headline-container">
+                <h2 class="main-headline">Рисунки с номерами</h2>
+            </div>
+            <form name="form1" class="main-form" id="mainForm">
+                <input type="text" name="a1" size="1" id="changeInput1"/> и
+                <input type="text" name="a2" size="1" id="changeInput2"/>
+                <input type="submit" value="Поменять местами"/><br>
+            </form>
+            <form name="form2" class="secondary-form" id="secondaryForm">
+                <input type="text" name="a3" size=1 id="chosenInput"/>
+                <input type="submit" value="Add"/><br>
+            </form>
+            <div class="result" id="result"></div>
+        </div>
+    </section>
+</main>
+
+<script>
+
+  const mainForm = document.getElementById('mainForm')
+  const secondForm = document.getElementById('secondaryForm')
+  const changeInput1 = document.getElementById('changeInput1')
+  const changeInput2 = document.getElementById('changeInput2')
+  const chosenInput = document.getElementById('chosenInput')
+  const resultContainer = document.getElementById('result')
+  const listArr = Array.from(document.getElementById('imagesList').children)
+  const imagesArr = []
+  const resultImage = document.getElementById('resultImage')
+
+  listArr.forEach(function (el) {
+    imagesArr.push(el.children.item(0))
+  })
+
+  mainForm.addEventListener('submit', handleSubmit)
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    let firstImgNum = (changeInput1.value - 1)
+    let secondImgNum = (changeInput2.value - 1)
+
+    if ((firstImgNum >= 0 && firstImgNum < imagesArr.length) &&
+      (secondImgNum >= 0 && firstImgNum < imagesArr.length)) {
+
+      let firstImgSrc = imagesArr[firstImgNum].src
+
+      imagesArr[firstImgNum].src = imagesArr[secondImgNum].src
+      imagesArr[secondImgNum].src = firstImgSrc
+    }
+    else {
+      alert("Введите два верных номера")
+    }
+  }
+
+  secondForm.addEventListener('submit', handleSecondSubmit)
+
+  function handleSecondSubmit(e) {
+    e.preventDefault()
+    let chosenImageNum = (chosenInput.value - 1)
+
+    if (chosenImageNum >= 0 && chosenImageNum < imagesArr.length) {
+      resultContainer.innerHTML = `<img src="${imagesArr[chosenImageNum].src}" width="${imagesArr[chosenImageNum].width}" id="resultImage" name="${imagesArr[chosenImageNum].name}"/>`
+    }
+    else {
+      alert('Введите правильное число')
+    }
+  }
+
+  preventNonInt(changeInput1)
+  preventNonInt(changeInput2)
+  preventNonInt(chosenInput)
+
+  function preventNonInt(el) {
+    el.addEventListener('input', function () {
+      if (this.value) {
+        this.value = this.value.replace(/[^\d.]/g, '')
+        this.setAttribute('autocomplete', 'off')
+      }
+    })
+  }
+
+  const resultContainerWidth = resultContainer.style.width
+
+  resultContainer.addEventListener('mouseenter', zoomIn)
+  resultContainer.addEventListener('mouseleave', zoomOut)
+
+  function zoomIn() {
+    resultContainer.style.width = '50%'
+  }
+
+  function zoomOut() {
+    resultContainer.style.width = resultContainerWidth
+  }
+
+</script>
+</body>
+</html>
