@@ -6,15 +6,15 @@
             margin: 0;
         }
 
+        section {
+            padding: 30px 0;
+        }
+
         .container {
             max-width: 1240px;
             width: 100%;
             padding: 15px;
             margin: 0 auto;
-        }
-
-        .main-section {
-            padding: 30px 0;
         }
 
         .main-headline-container {
@@ -53,15 +53,47 @@
             margin-bottom: 20px;
             text-align: center;
         }
+
         .result {
             width: 30%;
             margin: 0 auto;
             transition: .3s ease-in-out;
         }
+
         .result img {
             width: 100%;
             height: auto;
             display: block;
+        }
+        .main-nav {
+            text-align: center;
+        }
+        .nav-list {
+            display: inline-block;
+            list-style: none;
+        }
+        .nav-list-item {
+            display: inline-block;
+            position: relative;
+        }
+        .nav-link {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0,0,0, .3);
+            color: #fff;
+            transition: .3s ease-in-out;
+        }
+        .nav-link:hover {
+            background-color: rgba(0,0,0, .1);
+            color: #000;
+            box-shadow: 3px 3px 10px rgba(0,0,0, .2);
+        }
+        .link-arrow {
+            position: absolute;
+            top: -225%;
+            left: 20%;
+            transform: rotate(90deg);
         }
     </style>
 </head>
@@ -100,6 +132,27 @@
             <div class="result" id="result"></div>
         </div>
     </section>
+    <section class="nav-section">
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-list-item">
+                    <a href="#" class="nav-link">Link 1</a>
+                </li>
+                <li class="nav-list-item">
+                    <a href="#" class="nav-link">Link 2</a>
+                </li>
+                <li class="nav-list-item">
+                    <a href="#" class="nav-link">Link 3</a>
+                </li>
+                <li class="nav-list-item">
+                    <a href="#" class="nav-link">Link 4</a>
+                </li>
+                <li class="nav-list-item">
+                    <a href="#" class="nav-link">Link 5</a>
+                </li>
+            </ul>
+        </nav>
+    </section>
 </main>
 
 <script>
@@ -110,11 +163,28 @@
   const changeInput2 = document.getElementById('changeInput2')
   const chosenInput = document.getElementById('chosenInput')
   const resultContainer = document.getElementById('result')
-  const listArr = Array.from(document.getElementById('imagesList').children)
+  const resultContainerWidth = resultContainer.style.width
+  const imagesListArr = Array.from(document.getElementById('imagesList').children)
   const imagesArr = []
-  const resultImage = document.getElementById('resultImage')
+  const navLinksArr = Array.from(document.getElementsByClassName('nav-list-item'))
 
-  listArr.forEach(function (el) {
+  navLinksArr.forEach(function(el) {
+    const arrow = document.createElement('span')
+    arrow.classList.add('link-arrow')
+    arrow.innerText = '>>>>'
+    el.addEventListener('mouseenter', showArrow)
+    el.addEventListener('mouseleave', hideArrow)
+
+    function showArrow() {
+      el.appendChild(arrow)
+    }
+    
+    function hideArrow() {
+      el.removeChild(arrow)
+    }
+  })
+
+  imagesListArr.forEach(function (el) {
     imagesArr.push(el.children.item(0))
   })
 
@@ -145,7 +215,7 @@
     let chosenImageNum = (chosenInput.value - 1)
 
     if (chosenImageNum >= 0 && chosenImageNum < imagesArr.length) {
-      resultContainer.innerHTML = `<img src="${imagesArr[chosenImageNum].src}" width="${imagesArr[chosenImageNum].width}" id="resultImage" name="${imagesArr[chosenImageNum].name}"/>`
+      resultContainer.innerHTML = `<img src="${imagesArr[chosenImageNum].src}" width="${imagesArr[chosenImageNum].width}" name="${imagesArr[chosenImageNum].name}"/>`
     }
     else {
       alert('Введите правильное число')
@@ -165,8 +235,6 @@
     })
   }
 
-  const resultContainerWidth = resultContainer.style.width
-
   resultContainer.addEventListener('mouseenter', zoomIn)
   resultContainer.addEventListener('mouseleave', zoomOut)
 
@@ -177,6 +245,8 @@
   function zoomOut() {
     resultContainer.style.width = resultContainerWidth
   }
+
+
 
 </script>
 </body>
