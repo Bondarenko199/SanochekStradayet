@@ -92,9 +92,13 @@
         }
         .link-arrow {
             position: absolute;
-            top: -225%;
-            left: 20%;
-            transform: rotate(90deg);
+            top: -230%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .arrow-img {
+            width: 30px;
+            display: block;
         }
     </style>
 </head>
@@ -172,7 +176,7 @@
   navLinksArr.forEach(function(el) {
     const arrow = document.createElement('span')
     arrow.classList.add('link-arrow')
-    arrow.innerText = '>>>>'
+    arrow.innerHTML = '<img src="./img/687912_arrows_512x512.png" alt="arrow" class="arrow-img">'
     el.addEventListener('mouseenter', showArrow)
     el.addEventListener('mouseleave', hideArrow)
 
